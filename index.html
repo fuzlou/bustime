@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bus Time and Bus Stop Details</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+
+<body>
+    <label for="inputTime">Enter a time (e.g., 6:00AM, 10:00AM, 12:00PM, 2:00PM, 5:00PM, 9:00PM):</label>
+    <input type="text" id="inputTime">
+    <button onclick="calculateBusTimes()">Calculate Bus Times</button>
+
+    <div id="output"></div>
+
+    <script>
+        function calculateBusTimes() {
+            const inputTime = document.getElementById('inputTime').value;
+            const times = ["6:00AM", "10:00AM", "12:00PM", "2:00PM", "5:00PM", "9:00PM"];
+
+            const inputMoment = moment(inputTime, 'h:mmA');
+            if (!inputMoment.isValid()) {
+                alert("Invalid input time. Please enter a valid time in the format 'h:mmAM/PM'");
+                return;
+            }
+
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "";
+
+            times.forEach(time => {
+                const timeMoment = moment(time, 'h:mmA');
+                const resultMoment = inputMoment.clone().add(23, 'minutes');
+                const timestamps = [];
+
+                for (let i = 0; i < 14; i++) {
+                    timestamps.push(resultMoment.format('h:mmA'));
+                    resultMoment.add(23, 'minutes');
+                }
+
+                const busStopDetails = [
+                    "edavannapara", "pallipadi", "kallittapalam", "vettupara", "edashirikkadavu",
+                    "vavoor", "poonkudi", "peta", "AABB", "alukkal", "AACC", "sullamusalam",
+                    "arkd juction", "areekode"
+                ];
+
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>Bus Time: ${time}</strong>
+                                 <div style="display: flex; flex-direction: row;">
+                                     <div style="flex: 1;">
+                                         <strong>Bus Stop Details:</strong><br>${busStopDetails.join("<br>")}
+                                     </div>
+                                     <div style="flex: 1;">
+                                         <strong>Bus Stop Time:</strong><br>${timestamps.join("<br>")}
+                                     </div>
+                                 </div>`;
+                outputDiv.appendChild(div);
+            });
+        }
+    </script>
+</body>
+
+</html>
+
+
